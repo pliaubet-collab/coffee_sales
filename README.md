@@ -32,14 +32,13 @@ Comment suivre la performance commerciale d'un réseau multi-enseignes face aux 
 - Cartes KPI avec code couleur conditionnel (Réel vs Budget)
 - Waterfall interactif avec signets et boutons (bascule Segment / Marque / Format)
 - Infobulles personnalisées et **dynamiques** : survol d'une enseigne → Top 10 / Bottom 10 de ses magasins, avec le nom de l'enseigne affiché en temps réel
-- Carte géographique avec dégradé de couleur (plutôt que taille de bulle, pour refléter honnêtement un écart territorial modéré)
 
 ## 💡 Insights clés
 
-- Le réseau dépasse systématiquement son budget (**+4,2 %**), de façon homogène sur tous les canaux — signal de stabilité plus que de disparité
-- La marque leader (**Grand Mère**, 931 k€... en volume) doit sa première place à son **prix moyen le plus bas** du portefeuille, pas à un positionnement premium — lecture croisée prix/volume
+- Le réseau dépasse systématiquement son budget (**+4,2 %**), de façon homogène sur tous les canaux. Un signal de stabilité plus que de disparité
+- La marque leader (**Grand Mère**, 931 k€... en volume) doit sa première place à son **prix moyen le plus bas** du portefeuille, pas à un positionnement premium. Lecture croisée prix/volume
 - La vraie disparité de performance se joue au niveau du **magasin individuel** (écart-type ~16 % de la moyenne, facteur ~3x entre meilleur et pire point de vente), **sans corrélation avec l'enseigne ou la zone géographique** → implique un accompagnement terrain ciblé plutôt qu'une politique uniforme par canal
-- Un contrôle qualité des données a révélé que l'identifiant magasin n'était fiable qu'en combinant nom + ville + enseigne (1000 magasins réels, contre une fausse lecture à 776 en ne se fiant qu'au nom) — corrigé avant toute conclusion
+- Un contrôle qualité des données a révélé que l'identifiant magasin n'était fiable qu'en combinant nom + ville + enseigne (1000 magasins réels, contre une fausse lecture à 776 en ne se fiant qu'au nom), corrigé avant toute conclusion
 
 ## 💼 Valeur business concrète
 
@@ -59,8 +58,8 @@ Au-delà de la technique, ce que ce type de projet apporte une fois déployé en
 
 ## 📁 Contenu du repo
 
-- `Dashboard.pbix` — fichier Power BI source
-- `Dashboard.pdf` — export statique du rapport
+- `cafe.pbix` — fichier Power BI source
+- `cafe.pdf` — export statique du rapport
 - Captures d'écran du dashboard
 
 ---
