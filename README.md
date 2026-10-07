@@ -1,67 +1,67 @@
-# ☕ Suivi de Performance Commerciale — Réel vs Budget
+# Suivi de performance commerciale : Réel vs Budget
 
-Dashboard Power BI interactif analysant la performance commerciale d'un réseau de distribution de café (1 000 magasins, 10 enseignes, 10 villes françaises, 2023–2025), avec comparaison systématique du réalisé face aux objectifs budgétaires.
+Dashboard Power BI interactif analysant la performance commerciale d'un réseau de distribution de café (1 000 magasins, 10 enseignes, 10 villes françaises, 2023 à 2025), avec comparaison du réalisé face aux objectifs budgétaires et à l'année précédente.
 
-> 📌 **Dataset** : données de formation anonymisées (aucune donnée réelle d'entreprise). Le projet se concentre sur la méthodologie, la modélisation et la restitution transférables à tout contexte retail/distribution.
+> **Dataset** : données de formation anonymisées, sans lien avec une entreprise réelle. Le projet porte sur la méthode (préparation, modélisation, restitution), transposable à tout contexte retail ou distribution. Certains indicateurs sont très homogènes, ce qui s'explique probablement par la génération du jeu de données.
 
 ---
 
-## 🎯 Problématique
+## Problématique
 
-Comment suivre la performance commerciale d'un réseau multi-enseignes face aux objectifs fixés, et identifier les leviers d'action réels (produit, point de vente) derrière des indicateurs globaux souvent trompeurs ?
+Comment suivre la performance commerciale d'un réseau multi-enseignes face à ses objectifs, et identifier où se situent les vrais leviers d'action (produit, point de vente) derrière des indicateurs globaux parfois trompeurs ?
 
-## 🔍 Démarche
+## Démarche
 
-**1. Préparation et automatisation des données (Power Query)**
-- Connexion et fusion de 3 sources (ventes, clients, produits) via un pipeline ETL reproductible
-- Nettoyage (valeurs nulles, typage)
-- Fractionnement et catégorisation géographique d'une colonne adresse composite, pour un géocodage fiable
-- **Pipeline entièrement automatisé** : chaque étape de nettoyage/transformation est enregistrée comme une requête Power Query rejouable, un simple clic sur "Actualiser" recharge et retraite l'intégralité des données sources, sans aucune reprise manuelle. Ce qui a demandé plusieurs heures de préparation la première fois devient un rafraîchissement de quelques secondes à chaque nouvelle période
+**1. Préparation des données (Power Query)**
+- Connexion et combinaison de 3 sources (ventes, clients, produits)
+- Nettoyage des valeurs nulles, typage, création de la colonne de chiffre d'affaires
+- Chaque étape est enregistrée dans une requête rejouable : lorsque les fichiers sources sont mis à jour, un clic sur « Actualiser » relance tout le traitement sans reprise manuelle
 
 **2. Modélisation**
-- Relations en étoile, table calendrier dédiée au time intelligence
-- Mesures DAX organisées par dossiers logiques (CA par période, Écarts, Évolution N/N-1, Volumétrie, Classements)
+- Modèle en étoile et table calendrier dédiée au time intelligence
+- Mesures DAX organisées par dossiers (CA par période, écarts, évolution N/N-1, volumétrie, classements)
 
-**3. DAX avancé**
-- Time intelligence (`DATEADD`) pour les comparaisons N / N-1
-- Mesures d'écart et de taux d'atteinte budget (`DIVIDE` défensif)
-- Classements dynamiques (`RANKX` + `ALL` + `FILTER`) pour isoler les meilleurs/pires points de vente **à l'intérieur d'un contexte de filtre donné** (par enseigne, via les infobulles) — avec gestion explicite des pièges de contexte de filtre (valeurs `BLANK` faussant un classement croissant)
-- Formats de nombre dynamiques (expression de chaîne de format conditionnelle : affichage automatique en M€ ou Md€ selon l'ordre de grandeur)
+**3. DAX**
+- Comparaisons N / N-1 avec `DATEADD`
+- Écarts et taux d'atteinte du budget, avec `DIVIDE` pour éviter les divisions par zéro
+- Classements dynamiques (`RANKX`, `ALL`, `FILTER`) pour isoler les 10 meilleurs et 10 moins bons magasins dans le contexte de filtre actif (une enseigne survolée, par exemple). Un piège a été identifié et corrigé : les combinaisons vides (`BLANK`) faussaient le classement croissant
 
-**4. Dataviz & interactivité**
-- Cartes KPI avec code couleur conditionnel (Réel vs Budget)
-- Waterfall interactif avec signets et boutons (bascule Segment / Marque / Format)
-- Infobulles personnalisées et **dynamiques** : survol d'une enseigne → Top 10 / Bottom 10 de ses magasins, avec le nom de l'enseigne affiché en temps réel
+**4. Visualisation et interactivité**
+- Cartes de synthèse (CA réel, CA budget, écarts, évolution N/N-1) et filtres par période, enseigne, segment et marque
+- Graphique de tendance Réel / Budget / N-1 par mois
+- Treemap du mix produit (segment puis marque)
+- Waterfall budget vers réel, avec signets et boutons pour basculer entre segment, marque et format
+- Infobulles personnalisées : le survol d'une enseigne affiche ses 10 meilleurs et 10 moins bons magasins
 
-## 💡 Insights clés
+## Insights clés
 
-- Le réseau dépasse systématiquement son budget (**+4,2 %**), de façon homogène sur tous les canaux. Un signal de stabilité plus que de disparité
-- La marque leader (**Grand Mère**, 931 k€... en volume) doit sa première place à son **prix moyen le plus bas** du portefeuille, pas à un positionnement premium. Lecture croisée prix/volume
-- La vraie disparité de performance se joue au niveau du **magasin individuel** (écart-type ~16 % de la moyenne, facteur ~3x entre meilleur et pire point de vente), **sans corrélation avec l'enseigne ou la zone géographique** → implique un accompagnement terrain ciblé plutôt qu'une politique uniforme par canal
-- Un contrôle qualité des données a révélé que l'identifiant magasin n'était fiable qu'en combinant nom + ville + enseigne (1000 magasins réels, contre une fausse lecture à 776 en ne se fiant qu'au nom), corrigé avant toute conclusion
+1. **L'écart se joue entre magasins.** Sur 1 000 magasins, le CA réel varie d'environ 2,1 à 6,3 M€ (moyenne 3,6 M€). Les magasins les plus faibles se répartissent entre plusieurs enseignes et villes : le levier est le point de vente, pas le canal ni la zone géographique.
+2. **La croissance s'est arrêtée en 2025.** Le CA réel annuel passe d'environ 1,10 Md€ (2023) à 1,24 Md€ (2024), puis reste stable en 2025.
+3. **Grand Mère est la première marque en CA réel** (931 M€) avec le prix moyen le plus bas du portefeuille : sa position vient du volume plutôt que du prix.
+4. **Capsules pèse environ 37 % du CA.** Les trois autres segments sont proches entre eux, et le dépassement du budget se répartit au prorata du poids de chaque segment.
+5. **Un dépassement du budget quasi identique partout (environ +4 % sur la période).** Cette homogénéité ne permet pas de repérer un canal en difficulté, ce qui explique le choix de descendre au niveau magasin.
+   
 
-## 💼 Valeur business concrète
+## Ce que ce projet illustre côté entreprise
 
-Au-delà de la technique, ce que ce type de projet apporte une fois déployé en entreprise :
-
-| Compétence | Bénéfice concret pour l'entreprise |
+| Compétence | Bénéfice |
 |---|---|
-| Pipeline Power Query automatisé | Fin des reportings Excel reconstruits à la main chaque mois — gain de temps récurrent et suppression du risque d'erreur de copier-coller sur un fichier critique |
-| Mesures DAX Réel vs Budget en temps réel | Pilotage budgétaire actualisable à tout moment, sans attendre une consolidation manuelle en fin de mois |
-| Classements dynamiques par magasin (RANKX) | Détection immédiate des points de vente à accompagner, sans extraction ni tri manuel dans Excel |
-| Infobulles contextuelles par enseigne | Les managers terrain explorent eux-mêmes le détail qui les concerne, sans solliciter un rapport sur-mesure à chaque demande — autonomie des équipes métier |
-| Contrôle qualité des données (détection de doublons d'identifiants) | Fiabilise les décisions prises sur ces chiffres — une erreur de granularité non détectée peut fausser durablement un pilotage |
+| Pipeline Power Query rejouable | Moins de retraitement manuel à chaque mise à jour, et moins de risque d'erreur de copier-coller |
+| Mesures Réel vs Budget | Suivi des écarts actualisable sans consolidation manuelle |
+| Classements dynamiques par magasin | Repérage rapide des points de vente à accompagner |
+| Infobulles contextuelles | Les équipes métier consultent elles-mêmes le détail de leur enseigne |
+| Contrôles qualité sur les données | Des conclusions fiabilisées avant diffusion |
 
-## 🛠️ Compétences démontrées
+## Compétences
 
-`Power Query (ETL & automatisation)` `Modélisation de données` `DAX avancé (RANKX, CALCULATE, DATEADD, FILTER, format dynamique)` `Time Intelligence` `UX de dashboard (signets, infobulles dynamiques)` `Rigueur analytique & contrôle qualité des données` `Storytelling data`
+`Power Query` `Modélisation de données` `DAX (CALCULATE, DATEADD, RANKX, FILTER)` `Time intelligence` `Signets et infobulles Power BI` `Contrôle qualité des données` `Restitution des résultats`
 
-## 📁 Contenu du repo
+## Contenu du dépôt
 
-- `cafe.pbix` — fichier Power BI source
-- `cafe.pdf` — export statique du rapport
+- `cafe.pbix` : fichier Power BI source
+- `cafe.pdf` : export statique du rapport
 - Captures d'écran du dashboard
 
 ---
 
-📬 Pierre Liaubet — [LinkedIn](https://www.linkedin.com/in/pierre-liaubet-tourisme-data/) · [GitHub](https://github.com/pliaubet-collab)
+Pierre Liaubet · [LinkedIn](https://www.linkedin.com/in/pierre-liaubet-tourisme-data/) · [GitHub](https://github.com/pliaubet-collab)
